@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JimPong</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            background-color: #1a1a2e;
+            color: #fff;
+            text-align: center;
+            font-family: 'Press Start 2P', cursive;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        #gameArea {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        /* Scoreboard */
+        #scoreboard {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            border: 4px solid #0f3460;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #16213e;
+            box-shadow: 0 0 20px rgba(15, 52, 96, 0.5);
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        .score-item {
+            flex: 1;
+        }
+        .score-item h3 {
+            margin: 0;
+            color: #e94560;
+            font-size: 14px;
+        }
+        .score-item p {
+            margin: 5px 0 0 0;
+            font-size: 12px;
+        }
+
+        /* Main Container: Game and Controls */
+        #mainContainer {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            width: 100%;
+            flex-wrap: nowrap;
+        }
+        #gameContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex: 1;
+            min-width: 300px;
+        }
+        canvas {
+            background-color: #16213e;
+            border: 4px solid #0f3460;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(15, 52, 96, 0.5);
+            max-width: 100%;
+            height: auto;
+            flex: 1;
+        }
+
+        /* Controls Instructions */
+        #controlsContainer {
+            margin: 20px;
+            text-align: left;
+            font-size: 14px;
+            border: 4px solid #0f3460;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #16213e;
+            box-shadow: 0 0 20px rgba(15, 52, 96, 0.5);
+            max-width: 300px;
+            width: 100%;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+
+        /* Start Button */
+        #startButton {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            padding: 10px 20px;
+            background-color: #e94560;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+        #startButton:hover {
+            background-color: #ff6b6b;
+        }
+
+        /* Message Overlays */
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(26, 26, 46, 0.95);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(15, 52, 96, 0.7);
+            z-index: 10;
+            display: none; /* Hidden by default */
+            text-align: center;
+        }
+        .overlay h2 {
+            color: #e94560;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .overlay button {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            padding: 8px 16px;
+            background-color: #e94560;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .overlay button:hover {
+            background-color: #ff6b6b;
+        }
+
+        /* Pause Overlay */
+        #pauseOverlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(26, 26, 46, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border-radius: 10px;
+            display: none; /* Hidden by default */
+            z-index: 10;
+        }
+        #pauseOverlay h2 {
+            color: #e94560;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 1024px) {
+            #mainContainer {
+                flex-direction: column;
+            }
+            #controlsContainer {
+                margin: 20px 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 28px;
+            }
+            #scoreboard {
+                flex-direction: column;
+            }
+            .score-item {
+                margin-bottom: 10px;
+            }
+            .score-item:last-child {
+                margin-bottom: 0;
+            }
+            #controlsContainer {
+                max-width: 100%;
+                margin: 10px 0;
+            }
+            ul {
+                font-size: 12px;
+            }
+            li {
+                margin-bottom: 8px;
+                font-size: 12px;
+            }
+            #startButton {
+                font-size: 12px;
+                padding: 8px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 24px;
+            }
+            #scoreboard {
+                padding: 10px;
+            }
+            .score-item h3 {
+                font-size: 12px;
+            }
+            .score-item p {
+                font-size: 10px;
+            }
+            ul {
+                font-size: 10px;
+            }
+            li {
+                margin-bottom: 6px;
+                font-size: 10px;
+            }
+            #startButton {
+                font-size: 10px;
+                padding: 6px 12px;
+            }
+            #controlsContainer {
+                padding: 15px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>JimPong</h1>
+    <div id="gameArea">
+        <!-- Scoreboard -->
+        <div id="scoreboard">
+            <div class="score-item">
+                <h3>Score</h3>
+                <p><span id="score">0</span></p>
+            </div>
+            <div class="score-item">
+                <h3>Round</h3>
+                <p><span id="round">1/10</span></p>
+            </div>
+            <div class="score-item">
+                <h3>Level</h3>
+                <p><span id="level">1</span></p>
+            </div>
+        </div>
+
+        <!-- Main Container: Game and Controls -->
+        <div id="mainContainer">
+            <!-- Game Container -->
+            <div id="gameContainer">
+                <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+                <!-- Congratulatory Message Overlay -->
+                <div id="congratsOverlay" class="overlay">
+                    <h2>Congratulations! You've completed the round!</h2>
+                    <button onclick="closeCongrats()">OK</button>
+                </div>
+
+                <!-- Game Over Message Overlay -->
+                <div id="gameOverOverlay" class="overlay">
+                    <h2>Game Over!</h2>
+                    <button onclick="restartGame()">Try Again</button>
+                </div>
+
+                <!-- Pause Overlay -->
+                <div id="pauseOverlay">
+                    <h2>Game Paused</h2>
+                </div>
+            </div>
+
+            <!-- Controls Instructions -->
+            <div id="controlsContainer">
+                <h2>Controls</h2>
+                <p><strong>Left Paddle:</strong></p>
+                <ul>
+                    <li>Press <strong>Q</strong> to move Up.</li>
+                    <li>Press <strong>W</strong> to move Down.</li>
+                </ul>
+                <p><strong>Right Paddle:</strong></p>
+                <ul>
+                    <li>Press <strong>O</strong> to move Up.</li>
+                    <li>Press <strong>P</strong> to move Down.</li>
+                </ul>
+                <p><strong>Pause:</strong> Press <strong>Space Bar</strong> to pause/resume the game.</p>
+                <p><em>Start the game by pressing any control key or the Start button below.</em></p>
+            </div>
+        </div>
+        <button id="startButton">Start Game</button>
+
+        <script>
+            const canvas = document.getElementById('gameCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // Set up logical canvas size
+            const LOGICAL_WIDTH = 800;
+            const LOGICAL_HEIGHT = 600;
+
+            // Scale factors
+            let scaleX = 1;
+            let scaleY = 1;
+
+            // Responsive canvas sizing
+            function resizeCanvas() {
+                const container = canvas.parentElement;
+                const containerWidth = container.clientWidth;
+                const containerHeight = window.innerHeight - 300; // Adjust based on other elements' height
+
+                // Maintain aspect ratio
+                const aspect = LOGICAL_WIDTH / LOGICAL_HEIGHT;
+                let newWidth = containerWidth;
+                let newHeight = newWidth / aspect;
+
+                if (newHeight > containerHeight) {
+                    newHeight = containerHeight;
+                    newWidth = newHeight * aspect;
+                }
+
+                canvas.style.width = `${newWidth}px`;
+                canvas.style.height = `${newHeight}px`;
+
+                // Update scale factors
+                scaleX = newWidth / LOGICAL_WIDTH;
+                scaleY = newHeight / LOGICAL_HEIGHT;
+
+                // Optionally, redraw or adjust game elements here if needed
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            window.addEventListener('load', resizeCanvas);
+            resizeCanvas(); // Initial call
+
+            const paddleWidth = 10;
+            const paddleHeight = 100;
+            const ballRadius = 10;
+
+            let leftPaddle = {
+                x: 20,
+                y: LOGICAL_HEIGHT / 2 - paddleHeight / 2,
+                width: paddleWidth,
+                height: paddleHeight,
+                dy: 0
+            };
+
+            let rightPaddle = {
+                x: LOGICAL_WIDTH - 20 - paddleWidth,
+                y: LOGICAL_HEIGHT / 2 - paddleHeight / 2,
+                width: paddleWidth,
+                height: paddleHeight,
+                dy: 0
+            };
+
+            let ball = {
+                x: LOGICAL_WIDTH / 2,
+                y: LOGICAL_HEIGHT / 2,
+                radius: ballRadius,
+                speed: 5,
+                dx: 0,
+                dy: 0
+            };
+
+            let score = 0;
+            let level = 1;
+            let round = 1;
+            const maxRounds = 10;
+            const pointsPerLevel = 10;
+
+            let keys = {};
+            let gameStarted = false;
+            let isPaused = false;
+
+            const startButton = document.getElementById('startButton');
+            const congratsOverlay = document.getElementById('congratsOverlay');
+            const gameOverOverlay = document.getElementById('gameOverOverlay');
+            const pauseOverlay = document.getElementById('pauseOverlay');
+
+            document.addEventListener('keydown', (e) => {
+                const key = e.key.toLowerCase();
+                keys[key] = true;
+
+                // Prevent default scrolling with keys
+                if (['q', 'w', 'o', 'p', ' '].includes(key)) {
+                    e.preventDefault();
+                }
+
+                // Start the game on first control key press
+                if (!gameStarted && ['q', 'w', 'o', 'p'].includes(key)) {
+                    startGame();
+                }
+
+                // Pause/Resume the game with Space Bar
+                if (key === ' ') {
+                    togglePause();
+                }
+            });
+
+            document.addEventListener('keyup', (e) => {
+                const key = e.key.toLowerCase();
+                keys[key] = false;
+            });
+
+            startButton.addEventListener('click', () => {
+                if (!gameStarted) {
+                    startGame();
+                } else {
+                    restartGame();
+                }
+            });
+
+            function startGame() {
+                gameStarted = true;
+                isPaused = false;
+                ball.dx = (Math.random() > 0.5 ? 1 : -1) * ball.speed;
+                ball.dy = (Math.random() > 0.5 ? 1 : -1) * ball.speed;
+                startButton.textContent = 'Restart Game';
+                hideOverlays();
+            }
+
+            function resetBall() {
+                ball.x = LOGICAL_WIDTH / 2;
+                ball.y = LOGICAL_HEIGHT / 2;
+                ball.dx = 0;
+                ball.dy = 0;
+                gameStarted = false;
+                isPaused = false;
+                startButton.textContent = 'Start Game';
+                hideOverlays();
+            }
+
+            function drawPaddle(paddle) {
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+            }
+
+            function drawBall() {
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'red'; // Ball color set to red
+                ctx.fill();
+                ctx.closePath();
+            }
+
+            function draw() {
+                // Clear the canvas
+                ctx.clearRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
+
+                // Draw paddles and ball
+                drawPaddle(leftPaddle);
+                drawPaddle(rightPaddle);
+                drawBall();
+            }
+
+            function updatePaddles() {
+                // Left Paddle Controls: 'q' and 'w'
+                if (keys['q']) {
+                    leftPaddle.dy = -7;
+                } else if (keys['w']) {
+                    leftPaddle.dy = 7;
+                } else {
+                    leftPaddle.dy = 0;
+                }
+
+                // Right Paddle Controls: 'o' and 'p'
+                if (keys['o']) {
+                    rightPaddle.dy = -7;
+                } else if (keys['p']) {
+                    rightPaddle.dy = 7;
+                } else {
+                    rightPaddle.dy = 0;
+                }
+
+                leftPaddle.y += leftPaddle.dy;
+                rightPaddle.y += rightPaddle.dy;
+
+                // Prevent paddles from moving out of canvas
+                if (leftPaddle.y < 0) leftPaddle.y = 0;
+                if (leftPaddle.y + leftPaddle.height > LOGICAL_HEIGHT)
+                    leftPaddle.y = LOGICAL_HEIGHT - leftPaddle.height;
+
+                if (rightPaddle.y < 0) rightPaddle.y = 0;
+                if (rightPaddle.y + rightPaddle.height > LOGICAL_HEIGHT)
+                    rightPaddle.y = LOGICAL_HEIGHT - rightPaddle.height;
+            }
+
+            function updateBall() {
+                if (gameStarted && !isPaused) {
+                    ball.x += ball.dx;
+                    ball.y += ball.dy;
+
+                    // Top and bottom wall collision
+                    if (ball.y - ball.radius < 0 || ball.y + ball.radius > LOGICAL_HEIGHT) {
+                        ball.dy *= -1;
+                    }
+
+                    // Left paddle collision
+                    if (ball.x - ball.radius < leftPaddle.x + leftPaddle.width &&
+                        ball.y > leftPaddle.y &&
+                        ball.y < leftPaddle.y + leftPaddle.height) {
+                        ball.dx *= -1;
+                        ball.x = leftPaddle.x + leftPaddle.width + ball.radius; // Prevent sticking
+                        score++;
+                        checkLevelUp();
+                        updateScoreboard();
+                    }
+
+                    // Right paddle collision
+                    if (ball.x + ball.radius > rightPaddle.x &&
+                        ball.y > rightPaddle.y &&
+                        ball.y < rightPaddle.y + rightPaddle.height) {
+                        ball.dx *= -1;
+                        ball.x = rightPaddle.x - ball.radius; // Prevent sticking
+                        score++;
+                        checkLevelUp();
+                        updateScoreboard();
+                    }
+
+                    // Miss detection
+                    if (ball.x - ball.radius < 0 || ball.x + ball.radius > LOGICAL_WIDTH) {
+                        showGameOver();
+                    }
+                }
+            }
+
+            function checkLevelUp() {
+                if (score >= pointsPerLevel) {
+                    level++;
+                    round++;
+                    if (round > maxRounds) {
+                        winGame();
+                    } else {
+                        score = 0;
+                        ball.speed *= 1.1; // Increase speed by 10%
+                        // Update ball direction with increased speed
+                        ball.dx = (ball.dx > 0 ? 1 : -1) * ball.speed;
+                        ball.dy = (ball.dy > 0 ? 1 : -1) * ball.speed;
+                        showCongrats();
+                    }
+                    updateScoreboard();
+                }
+            }
+
+            function restartGame() {
+                resetBall();
+                score = 0;
+                level = 1;
+                round = 1;
+                ball.speed = 5;
+                updateScoreboard();
+            }
+
+            function winGame() {
+                showMessage("Congratulations! You won the game!");
+                score = 0;
+                level = 1;
+                round = 1;
+                ball.speed = 5;
+                resetBall();
+                updateScoreboard();
+            }
+
+            function updateScoreboard() {
+                document.getElementById('score').textContent = score;
+                document.getElementById('level').textContent = level;
+                document.getElementById('round').textContent = `${round}/${maxRounds}`;
+            }
+
+            function gameLoop() {
+                updatePaddles();
+                updateBall();
+                draw();
+                requestAnimationFrame(gameLoop);
+            }
+
+            // Initialize the game
+            resetBall();
+            updateScoreboard();
+            gameLoop();
+
+            // Congratulatory Message Function
+            function showCongrats() {
+                congratsOverlay.style.display = 'flex';
+                congratsOverlay.querySelector('button').focus(); // Automatically focus the button
+            }
+
+            function closeCongrats() {
+                congratsOverlay.style.display = 'none';
+            }
+
+            // Game Over Message Function
+            function showGameOver() {
+                gameOverOverlay.style.display = 'flex';
+                gameOverOverlay.querySelector('button').focus(); // Automatically focus the button
+            }
+
+            // Close Overlays when clicking outside or pressing a button
+            function hideOverlays() {
+                congratsOverlay.style.display = 'none';
+                gameOverOverlay.style.display = 'none';
+                pauseOverlay.style.display = 'none';
+            }
+
+            // General Message Function for Winning the Game
+            function showMessage(message) {
+                gameOverOverlay.querySelector('h2').textContent = message;
+                gameOverOverlay.style.display = 'flex';
+                gameOverOverlay.querySelector('button').focus(); // Automatically focus the button
+            }
+
+            // Pause Feature
+            function togglePause() {
+                if (!gameStarted) return; // Do nothing if game hasn't started
+
+                isPaused = !isPaused;
+                if (isPaused) {
+                    pauseOverlay.style.display = 'flex';
+                } else {
+                    pauseOverlay.style.display = 'none';
+                }
+            }
+
+            // Accessibility: Trigger "Try Again" on Enter key when button is focused
+            // Since buttons are natively focusable and trigger on Enter, this is inherently supported.
+            // However, to ensure it works seamlessly, we focus the button when overlay appears.
+
+            // Ensure that clicking outside overlays does not close them
+            // Overlays can only be closed via their respective buttons
+        </script>
+    </body>
+</html>
