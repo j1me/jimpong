@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>JimPong</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         /* Importing the 'Press Start 2P' font from Google Fonts */
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
@@ -14,7 +15,6 @@
             text-align: center;
             font-family: 'Press Start 2P', cursive;
             margin: 0;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -31,21 +31,21 @@
 
         @keyframes glow {
             from {
-                text-shadow: 0 0 5px #fff, 
-                             0 0 10px #fff, 
-                             0 0 15px #e94560, 
-                             0 0 20px #e94560, 
-                             0 0 35px #e94560, 
-                             0 0 40px #e94560, 
+                text-shadow: 0 0 5px #fff,
+                             0 0 10px #fff,
+                             0 0 15px #e94560,
+                             0 0 20px #e94560,
+                             0 0 35px #e94560,
+                             0 0 40px #e94560,
                              0 0 50px #e94560;
             }
             to {
-                text-shadow: 0 0 10px #fff, 
-                             0 0 20px #fff, 
-                             0 0 30px #e94560, 
-                             0 0 40px #e94560, 
-                             0 0 70px #e94560, 
-                             0 0 80px #e94560, 
+                text-shadow: 0 0 10px #fff,
+                             0 0 20px #fff,
+                             0 0 30px #e94560,
+                             0 0 40px #e94560,
+                             0 0 70px #e94560,
+                             0 0 80px #e94560,
                              0 0 100px #e94560;
             }
         }
@@ -57,72 +57,43 @@
             align-items: center;
             width: 100%;
             max-width: 1200px;
-            padding: 20px;
+            padding: 0;
             box-sizing: border-box;
             position: relative;
+            flex: 1;
         }
 
         /* Scoreboard Styling */
         #scoreboard {
             display: flex;
             justify-content: space-around;
+            align-items: center;
             width: 100%;
             max-width: 800px;
             text-align: center;
-            border: 4px solid #0f3460;
-            padding: 20px;
-            border-radius: 10px;
-            background-color: #16213e;
-            box-shadow: 0 0 20px rgba(15, 52, 96, 0.5);
-            margin-bottom: 20px;
+            padding: 10px 0;
             box-sizing: border-box;
             position: relative;
+            flex-wrap: wrap;
+            background-color: transparent;
+            margin-bottom: 10px;
         }
 
         .score-item {
             flex: 1;
+            min-width: 80px;
+            margin: 5px 0;
         }
 
         .score-item h3 {
             margin: 0;
             color: #e94560;
-            font-size: 14px;
+            font-size: 16px;
         }
 
         .score-item p {
             margin: 5px 0 0 0;
-            font-size: 12px;
-        }
-
-        /* Main Container: Game and Controls */
-        #mainContainer {
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            width: 100%;
-            flex-wrap: wrap;
-        }
-
-        /* Game Container */
-        #gameContainer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            flex: 1;
-            min-width: 300px;
-            margin: 20px;
-        }
-
-        canvas {
-            background-color: #16213e;
-            border: 4px solid #0f3460;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(15, 52, 96, 0.5);
-            max-width: 100%;
-            height: auto;
-            flex: 1;
-            touch-action: none; /* Prevent default touch behaviors */
+            font-size: 14px;
         }
 
         /* Controls Instructions Styling */
@@ -139,7 +110,37 @@
             width: 100%;
             box-sizing: border-box;
             flex-shrink: 0;
+        }
+
+        /* Main Container: Game and Controls */
+        #mainContainer {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            width: 100%;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        /* Game Container */
+        #gameContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
+            flex: 1;
+            margin: 0;
+        }
+
+        canvas {
+            background-color: #16213e;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            max-width: 100%;
+            height: auto;
+            flex: 1;
+            touch-action: none; /* Prevent default touch behaviors */
         }
 
         /* Start/Restart Button Styling */
@@ -153,7 +154,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            margin-top: 20px;
+            margin-top: 10px;
             z-index: 5;
         }
 
@@ -233,7 +234,7 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            border-radius: 10px;
+            border-radius: 0;
             display: none; /* Hidden by default */
             z-index: 10;
         }
@@ -249,9 +250,6 @@
             #mainContainer {
                 flex-direction: column;
             }
-            #controlsContainer {
-                margin: 20px 0;
-            }
         }
 
         @media (max-width: 768px) {
@@ -259,30 +257,23 @@
                 font-size: 28px;
             }
             #scoreboard {
-                flex-direction: column;
+                padding: 5px 0;
             }
-            .score-item {
-                margin-bottom: 10px;
-            }
-            .score-item:last-child {
-                margin-bottom: 0;
-            }
-            #controlsContainer {
-                max-width: 100%;
-                margin: 10px 0;
-            }
-            ul {
+            .score-item h3 {
                 font-size: 12px;
             }
-            li {
-                margin-bottom: 8px;
-                font-size: 12px;
+            .score-item p {
+                font-size: 10px;
             }
             #startButton {
                 font-size: 12px;
                 padding: 8px 16px;
+                margin-top: 5px;
             }
-
+            /* Hide controls instructions on mobile */
+            #controlsContainer {
+                display: none;
+            }
             /* Show mobile pause button */
             #mobilePauseButton {
                 display: block;
@@ -293,54 +284,15 @@
             h1 {
                 font-size: 24px;
             }
-            #scoreboard {
-                padding: 10px;
-            }
             .score-item h3 {
-                font-size: 12px;
+                font-size: 10px;
             }
             .score-item p {
-                font-size: 10px;
-            }
-            ul {
-                font-size: 10px;
-            }
-            li {
-                margin-bottom: 6px;
-                font-size: 10px;
+                font-size: 8px;
             }
             #startButton {
                 font-size: 10px;
                 padding: 6px 12px;
-            }
-            #controlsContainer {
-                padding: 15px;
-                font-size: 12px;
-            }
-        }
-
-        /* Controls Expand/Collapse on Mobile */
-        #controlsToggle {
-            display: none;
-            margin-top: 10px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 12px;
-            background-color: #e94560;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            padding: 5px 10px;
-            transition: background-color 0.3s ease;
-        }
-
-        #controlsToggle:hover {
-            background-color: #ff6b6b;
-        }
-
-        @media (max-width: 768px) {
-            #controlsToggle {
-                display: block;
             }
         }
     </style>
@@ -365,13 +317,11 @@
                 <h3>Level</h3>
                 <p><span id="level">1</span></p>
             </div>
-            <!-- Controls Toggle Button for Mobile -->
-            <button id="controlsToggle">Show Controls</button>
         </div>
 
         <!-- Main Container: Game and Controls -->
         <div id="mainContainer">
-            <!-- Controls Instructions -->
+            <!-- Controls Instructions (Visible only on Desktop) -->
             <div id="controlsContainer">
                 <h2>Controls</h2>
                 <p><strong>Left Paddle:</strong></p>
@@ -435,7 +385,7 @@
         function resizeCanvas() {
             const container = canvas.parentElement;
             const containerWidth = container.clientWidth;
-            const containerHeight = window.innerHeight - 300; // Adjust based on other elements' height
+            const containerHeight = window.innerHeight - document.getElementById('scoreboard').offsetHeight - document.getElementById('startButton').offsetHeight - 40; // Adjust based on other elements' height
 
             // Maintain aspect ratio
             const aspect = LOGICAL_WIDTH / LOGICAL_HEIGHT;
@@ -508,8 +458,6 @@
         const congratsOverlay = document.getElementById('congratsOverlay');
         const gameOverOverlay = document.getElementById('gameOverOverlay');
         const pauseOverlay = document.getElementById('pauseOverlay');
-        const controlsToggle = document.getElementById('controlsToggle');
-        const controlsContainer = document.getElementById('controlsContainer');
 
         // Event Listeners for Keyboard Controls
         document.addEventListener('keydown', (e) => {
@@ -552,17 +500,6 @@
                 startGame();
             } else {
                 togglePause();
-            }
-        });
-
-        // Event Listener for Controls Toggle (Mobile)
-        controlsToggle.addEventListener('click', () => {
-            if (controlsContainer.style.display === 'none' || controlsContainer.style.display === '') {
-                controlsContainer.style.display = 'block';
-                controlsToggle.textContent = 'Hide Controls';
-            } else {
-                controlsContainer.style.display = 'none';
-                controlsToggle.textContent = 'Show Controls';
             }
         });
 
@@ -752,7 +689,7 @@
         updateScoreboard();
         gameLoop();
 
-        /* 
+        /*
            Functions for Overlays
         */
 
@@ -787,7 +724,7 @@
             pauseOverlay.style.display = 'none';
         }
 
-        /* 
+        /*
            Pause Feature
         */
 
@@ -816,28 +753,33 @@
         */
 
         // Variables to track touch positions
-        let touchStartX = null;
-        let touchStartY = null;
+        let touchPositions = {};
 
         // Function to handle touch start
         function handleTouchStart(e) {
-            if (e.touches.length === 1) { // Single touch
-                touchStartX = e.touches[0].clientX;
-                touchStartY = e.touches[0].clientY;
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                const touch = e.changedTouches[i];
+                touchPositions[touch.identifier] = {
+                    x: touch.clientX,
+                    y: touch.clientY
+                };
             }
         }
 
         // Function to handle touch move
         function handleTouchMove(e) {
-            if (e.touches.length === 1) { // Single touch
-                let touchX = e.touches[0].clientX;
-                let touchY = e.touches[0].clientY;
+            e.preventDefault(); // Prevent scrolling when touching the canvas
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                const touch = e.changedTouches[i];
+                const prevPos = touchPositions[touch.identifier];
+                if (!prevPos) continue;
 
-                // Calculate movement
-                let deltaY = touchY - touchStartY;
+                const touchX = touch.clientX;
+                const touchY = touch.clientY;
+                const deltaY = touchY - prevPos.y;
 
-                // Determine which paddle to move based on touch position
-                if (touchX < window.innerWidth / 2) { // Left side touches move left paddle
+                // Determine which paddle to move based on initial touch position
+                if (prevPos.x < window.innerWidth / 2) { // Left side touches move left paddle
                     leftPaddle.y += deltaY * 0.5; // Adjust sensitivity
                     // Prevent paddle from moving out of canvas
                     if (leftPaddle.y < 0) leftPaddle.y = 0;
@@ -852,20 +794,26 @@
                 }
 
                 // Update touch positions
-                touchStartY = touchY;
+                touchPositions[touch.identifier] = {
+                    x: touchX,
+                    y: touchY
+                };
             }
         }
 
         // Function to handle touch end
         function handleTouchEnd(e) {
-            touchStartX = null;
-            touchStartY = null;
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                const touch = e.changedTouches[i];
+                delete touchPositions[touch.identifier];
+            }
         }
 
         // Attach touch event listeners to the canvas
         canvas.addEventListener('touchstart', handleTouchStart, false);
         canvas.addEventListener('touchmove', handleTouchMove, false);
         canvas.addEventListener('touchend', handleTouchEnd, false);
+        canvas.addEventListener('touchcancel', handleTouchEnd, false);
 
         /*
            Orientation Handling
