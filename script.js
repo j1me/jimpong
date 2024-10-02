@@ -10,17 +10,12 @@ const ctx = canvas.getContext('2d');
 const LOGICAL_WIDTH = 800;
 const LOGICAL_HEIGHT = 600;
 
-// Scale factors for responsive canvas sizing
-let scaleX = 1;
-let scaleY = 1;
-
 // Responsive canvas sizing
 function resizeCanvas() {
-    const container = canvas.parentElement;
+    const container = document.getElementById('gameContainer');
     const containerWidth = container.clientWidth;
-    const containerHeight = window.innerHeight - document.getElementById('scoreboard').offsetHeight - document.getElementById('startButton').offsetHeight - 40; // Adjust based on other elements' height
+    const containerHeight = container.clientHeight;
 
-    // Maintain aspect ratio
     const aspect = LOGICAL_WIDTH / LOGICAL_HEIGHT;
     let newWidth = containerWidth;
     let newHeight = newWidth / aspect;
@@ -30,17 +25,26 @@ function resizeCanvas() {
         newWidth = newHeight * aspect;
     }
 
+    // Set canvas display size
     canvas.style.width = `${newWidth}px`;
     canvas.style.height = `${newHeight}px`;
-
-    // Update scale factors
-    scaleX = newWidth / LOGICAL_WIDTH;
-    scaleY = newHeight / LOGICAL_HEIGHT;
 }
 
 window.addEventListener('resize', resizeCanvas);
-window.addEventListener('load', resizeCanvas);
-resizeCanvas(); // Initial call
+window.addEventListener('load', () => {
+    resizeCanvas();
+    initGame(); // Initialize game elements after canvas size is set
+});
+
+function initGame() {
+    // Initialize Paddle and Ball Positions based on canvas size
+    leftPaddle.x = 20;
+    leftPaddle.y = canvas.height / 2 - paddleHeight / 2;
+    rightPaddle.x = canvas.width - 20 - paddleWidth;
+    rightPaddle.y = canvas.height / 2 - paddleHeight / 2;
+    ball.x = canvas.width / 2;
+    ball.y = canvas.height / 2;
+}
 
 // Paddle and Ball Dimensions
 const paddleWidth = 10;
@@ -50,15 +54,15 @@ const ballRadius = 10;
 // Paddle Objects
 let leftPaddle = {
     x: 20,
-    y: LOGICAL_HEIGHT / 2 - paddleHeight / 2,
+    y: 0, // Will be set in initGame()
     width: paddleWidth,
     height: paddleHeight,
     dy: 0
 };
 
 let rightPaddle = {
-    x: LOGICAL_WIDTH - 20 - paddleWidth,
-    y: LOGICAL_HEIGHT / 2 - paddleHeight / 2,
+    x: 0, // Will be set in initGame()
+    y: 0, // Will be set in initGame()
     width: paddleWidth,
     height: paddleHeight,
     dy: 0
@@ -66,8 +70,8 @@ let rightPaddle = {
 
 // Ball Object
 let ball = {
-    x: LOGICAL_WIDTH / 2,
-    y: LOGICAL_HEIGHT / 2,
+    x: 0, // Will be set in initGame()
+    y: 0, // Will be set in initGame()
     radius: ballRadius,
     speed: 5,
     dx: 0,
@@ -88,9 +92,32 @@ let isPaused = false;
 // DOM Elements
 const startButton = document.getElementById('startButton');
 const mobilePauseButton = document.getElementById('mobilePauseButton');
+const toggleOrientationButton = document.getElementById('toggleOrientationButton');
 const congratsOverlay = document.getElementById('congratsOverlay');
 const gameOverOverlay = document.getElementById('gameOverOverlay');
 const pauseOverlay = document.getElementById('pauseOverlay');
+
+// Initialize Toggle Orientation Button Text
+toggleOrientationButton.textContent = 'Fit Height';
+
+// Variable to toggle between fitting to width or height
+let fitToWidth = true; // Initially fit canvas to width
+
+// Event Listener for Toggle Orientation Button
+toggleOrientationButton.addEventListener('click', () => {
+    fitToWidth = !fitToWidth;
+    if (fitToWidth) {
+        canvas.style.width = '100%';
+        canvas.style.height = 'auto';
+        toggleOrientationButton.textContent = 'Fit Height';
+    } else {
+        canvas.style.width = 'auto';
+        canvas.style.height = '100%';
+        toggleOrientationButton.textContent = 'Fit Width';
+    }
+    resizeCanvas();
+    initGame(); // Re-initialize positions after resizing
+});
 
 // Event Listeners for Keyboard Controls
 document.addEventListener('keydown', (e) => {
@@ -142,20 +169,20 @@ function startGame() {
     isPaused = false;
     ball.dx = (Math.random() > 0.5 ? 1 : -1) * ball.speed;
     ball.dy = (Math.random() > 0.5 ? 1 : -1) * ball.speed;
-    startButton.textContent = 'Restart Game';
+    startButton.style.display = 'none'; // Hide the Start button
     mobilePauseButton.textContent = 'Pause';
     hideOverlays();
 }
 
 // Function to Reset the Ball Position and State
 function resetBall() {
-    ball.x = LOGICAL_WIDTH / 2;
-    ball.y = LOGICAL_HEIGHT / 2;
+    ball.x = canvas.width / 2;
+    ball.y = canvas.height / 2;
     ball.dx = 0;
     ball.dy = 0;
     gameStarted = false;
     isPaused = false;
-    startButton.textContent = 'Start Game';
+    startButton.style.display = 'block'; // Show the Start button
     mobilePauseButton.textContent = 'Pause';
     hideOverlays();
 }
@@ -178,7 +205,7 @@ function drawBall() {
 // Function to Render the Game Elements
 function draw() {
     // Clear the canvas
-    ctx.clearRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw paddles and ball
     drawPaddle(leftPaddle);
@@ -212,12 +239,12 @@ function updatePaddles() {
 
     // Prevent Paddles from Moving Out of Canvas
     if (leftPaddle.y < 0) leftPaddle.y = 0;
-    if (leftPaddle.y + leftPaddle.height > LOGICAL_HEIGHT)
-        leftPaddle.y = LOGICAL_HEIGHT - leftPaddle.height;
+    if (leftPaddle.y + leftPaddle.height > canvas.height)
+        leftPaddle.y = canvas.height - leftPaddle.height;
 
     if (rightPaddle.y < 0) rightPaddle.y = 0;
-    if (rightPaddle.y + rightPaddle.height > LOGICAL_HEIGHT)
-        rightPaddle.y = LOGICAL_HEIGHT - rightPaddle.height;
+    if (rightPaddle.y + rightPaddle.height > canvas.height)
+        rightPaddle.y = canvas.height - rightPaddle.height;
 }
 
 // Function to Update Ball Position and Handle Collisions
@@ -227,7 +254,7 @@ function updateBall() {
         ball.y += ball.dy;
 
         // Top and Bottom Wall Collision
-        if (ball.y - ball.radius < 0 || ball.y + ball.radius > LOGICAL_HEIGHT) {
+        if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
             ball.dy *= -1;
         }
 
@@ -254,7 +281,7 @@ function updateBall() {
         }
 
         // Miss Detection
-        if (ball.x - ball.radius < 0 || ball.x + ball.radius > LOGICAL_WIDTH) {
+        if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
             showGameOver();
         }
     }
@@ -317,9 +344,7 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
-// Initialize the Game
-resetBall();
-updateScoreboard();
+// Start the Game Loop
 gameLoop();
 
 /*
@@ -376,12 +401,6 @@ function togglePause() {
 }
 
 /*
-   Accessibility Enhancements:
-   - Overlays automatically focus the primary button when displayed.
-   - Buttons are natively focusable and can be activated with the Enter key.
-*/
-
-/*
    Touch Controls for Mobile
 */
 
@@ -416,14 +435,14 @@ function handleTouchMove(e) {
             leftPaddle.y += deltaY * 0.5; // Adjust sensitivity
             // Prevent paddle from moving out of canvas
             if (leftPaddle.y < 0) leftPaddle.y = 0;
-            if (leftPaddle.y + leftPaddle.height > LOGICAL_HEIGHT)
-                leftPaddle.y = LOGICAL_HEIGHT - leftPaddle.height;
+            if (leftPaddle.y + leftPaddle.height > canvas.height)
+                leftPaddle.y = canvas.height - leftPaddle.height;
         } else { // Right side touches move right paddle
             rightPaddle.y += deltaY * 0.5; // Adjust sensitivity
             // Prevent paddle from moving out of canvas
             if (rightPaddle.y < 0) rightPaddle.y = 0;
-            if (rightPaddle.y + rightPaddle.height > LOGICAL_HEIGHT)
-                rightPaddle.y = LOGICAL_HEIGHT - rightPaddle.height;
+            if (rightPaddle.y + rightPaddle.height > canvas.height)
+                rightPaddle.y = canvas.height - rightPaddle.height;
         }
 
         // Update touch positions
@@ -447,19 +466,3 @@ canvas.addEventListener('touchstart', handleTouchStart, false);
 canvas.addEventListener('touchmove', handleTouchMove, false);
 canvas.addEventListener('touchend', handleTouchEnd, false);
 canvas.addEventListener('touchcancel', handleTouchEnd, false);
-
-/*
-   Orientation Handling
-*/
-
-// Function to check device orientation and prompt user
-function checkOrientation() {
-    if (window.innerWidth < window.innerHeight) {
-        // Portrait mode detected
-        alert("Please rotate your device to landscape mode for the best experience.");
-    }
-}
-
-window.addEventListener('orientationchange', checkOrientation);
-window.addEventListener('resize', checkOrientation);
-window.addEventListener('load', checkOrientation);

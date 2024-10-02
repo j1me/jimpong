@@ -13,7 +13,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
 }
 
 /* Game Title with Glowing Animation */
@@ -55,7 +54,6 @@ h1 {
     padding: 0;
     box-sizing: border-box;
     position: relative;
-    flex: 1;
 }
 
 /* Scoreboard Styling */
@@ -123,23 +121,29 @@ h1 {
     align-items: center;
     justify-content: center;
     position: relative;
-    flex: 1;
+    flex: 1 1 600px;
     margin: 0;
+    width: 100%;
+    max-width: 800px;
 }
 
+/* Canvas Styling */
 canvas {
     background-color: #16213e;
     border: none;
     border-radius: 0;
     box-shadow: none;
-    max-width: 100%;
+    width: 100%;
     height: auto;
-    flex: 1;
     touch-action: none; /* Prevent default touch behaviors */
 }
 
 /* Start/Restart Button Styling */
 #startButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-family: 'Press Start 2P', cursive;
     font-size: 14px;
     padding: 10px 20px;
@@ -149,7 +153,6 @@ canvas {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 10px;
     z-index: 5;
 }
 
@@ -161,7 +164,7 @@ canvas {
 #mobilePauseButton {
     display: none; /* Hidden by default, shown on mobile */
     position: absolute;
-    top: 10px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Press Start 2P', cursive;
@@ -177,6 +180,27 @@ canvas {
 }
 
 #mobilePauseButton:hover {
+    background-color: #ff6b6b;
+}
+
+/* Toggle Orientation Button */
+#toggleOrientationButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    padding: 8px 16px;
+    background-color: #e94560;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 10;
+}
+
+#toggleOrientationButton:hover {
     background-color: #ff6b6b;
 }
 
@@ -244,6 +268,10 @@ canvas {
 @media (max-width: 1024px) {
     #mainContainer {
         flex-direction: column;
+        align-items: center;
+    }
+    #gameContainer {
+        max-width: 100%;
     }
 }
 
@@ -263,7 +291,10 @@ canvas {
     #startButton {
         font-size: 12px;
         padding: 8px 16px;
-        margin-top: 5px;
+    }
+    #toggleOrientationButton {
+        font-size: 12px;
+        padding: 8px 16px;
     }
     /* Hide controls instructions on mobile */
     #controlsContainer {
@@ -286,6 +317,10 @@ canvas {
         font-size: 8px;
     }
     #startButton {
+        font-size: 10px;
+        padding: 6px 12px;
+    }
+    #toggleOrientationButton {
         font-size: 10px;
         padding: 6px 12px;
     }
