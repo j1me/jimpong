@@ -1,8 +1,5 @@
 /* styles.css */
 
-/* Importing the 'Press Start 2P' font from Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
 /* Global Styles */
 body {
     background-color: #1a1a2e;
@@ -264,64 +261,108 @@ canvas {
     font-size: 16px;
 }
 
-/* Responsive Design Adjustments */
-@media (max-width: 1024px) {
-    #mainContainer {
-        flex-direction: column;
-        align-items: center;
-    }
-    #gameContainer {
-        max-width: 100%;
-    }
+/* Welcome Screen Styling */
+#welcomeScreen {
+    display: none; /* Hidden by default, will be shown only on mobile */
+    text-align: center;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Full viewport height */
 }
 
+/* Ensure JimPong in the welcome screen has the same styling as the main header */
+#welcomeScreen .gameTitle {
+    font-size: 48px; /* Match the h1 font size */
+    text-shadow: 2px 2px #0f3460; /* Match the glow effect shadow */
+    animation: glow 2s ease-in-out infinite alternate; /* Apply the glow animation */
+    color: #fff; /* Set text color to white, same as h1 */
+}
+
+/* Update Play button in the welcome screen to match the other buttons */
+#welcomeScreen button {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    padding: 10px 20px;
+    background-color: #e94560;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Add hover effect for the Play button */
+#welcomeScreen button:hover {
+    background-color: #ff6b6b;
+}
+
+
+/* Mobile Specific Styles */
 @media (max-width: 768px) {
+    /* Show welcome screen on mobile */
+    #welcomeScreen {
+        display: flex;
+    }
+
+    /* Hide main game area and title initially on mobile */
+    #gameArea,
     h1 {
-        font-size: 28px;
+        display: none;
     }
-    #scoreboard {
-        padding: 5px 0;
+
+    /* Adjust h1 font size */
+    h1 {
+        font-size: 32px;
     }
-    .score-item h3 {
-        font-size: 12px;
-    }
-    .score-item p {
-        font-size: 10px;
-    }
-    #startButton {
-        font-size: 12px;
-        padding: 8px 16px;
-    }
-    #toggleOrientationButton {
-        font-size: 12px;
-        padding: 8px 16px;
-    }
-    /* Hide controls instructions on mobile */
+
+    /* Hide controls instructions */
     #controlsContainer {
         display: none;
     }
+
+    /* Adjust scoreboard font sizes */
+    .score-item h3 {
+        font-size: 12px;
+    }
+
+    .score-item p {
+        font-size: 10px;
+    }
+
+    /* Hide mobile pause button in portrait mode */
+    #mobilePauseButton {
+        display: none;
+    }
+}
+
+/* Mobile Landscape Mode Styles */
+@media (max-width: 768px) and (orientation: landscape) {
+    /* Show main game area and title in landscape mode */
+    #gameArea,
+    h1 {
+        display: flex;
+    }
+
+    /* Hide welcome screen in landscape mode */
+    #welcomeScreen {
+        display: none;
+    }
+
     /* Show mobile pause button */
     #mobilePauseButton {
         display: block;
     }
-}
 
-@media (max-width: 480px) {
-    h1 {
-        font-size: 24px;
+    /* Adjust canvas and container sizes */
+    #gameContainer {
+        max-width: 100%;
+        flex: 1;
     }
-    .score-item h3 {
-        font-size: 10px;
-    }
-    .score-item p {
-        font-size: 8px;
-    }
-    #startButton {
-        font-size: 10px;
-        padding: 6px 12px;
-    }
-    #toggleOrientationButton {
-        font-size: 10px;
-        padding: 6px 12px;
+
+    canvas {
+        width: 100%;
+        height: auto;
     }
 }

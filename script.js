@@ -62,6 +62,8 @@ const toggleOrientationButton = document.getElementById('toggleOrientationButton
 const congratsOverlay = document.getElementById('congratsOverlay');
 const gameOverOverlay = document.getElementById('gameOverOverlay');
 const pauseOverlay = document.getElementById('pauseOverlay');
+const playButton = document.getElementById('playButton');
+const welcomeScreen = document.getElementById('welcomeScreen');
 
 // Initialize Toggle Orientation Button Text
 toggleOrientationButton.textContent = 'Fit Height';
@@ -164,6 +166,29 @@ mobilePauseButton.addEventListener('click', () => {
     }
 });
 
+// Event Listener for Play Button on Mobile
+if (playButton) {
+    playButton.addEventListener('click', () => {
+        // Hide the welcome screen
+        welcomeScreen.style.display = 'none';
+        // Show the game area
+        document.getElementById('gameArea').style.display = 'flex';
+        // Lock the orientation to landscape if possible
+        lockOrientation();
+        // Start the game
+        startGame();
+    });
+}
+
+// Function to Lock Orientation to Landscape (for supported browsers)
+function lockOrientation() {
+    if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('landscape').catch((err) => {
+            console.warn('Orientation lock not allowed:', err);
+        });
+    }
+}
+
 // Function to Start the Game
 function startGame() {
     if (gameOver) return; // Prevent starting the game if it's over
@@ -177,7 +202,14 @@ function startGame() {
     ball.dx = direction * ball.speed * Math.cos(angle);
     ball.dy = ball.speed * Math.sin(angle);
 
-    startButton.style.display = 'none'; // Hide the Start button
+    // Hide the Start button (desktop)
+    startButton.style.display = 'none';
+
+    // Hide the welcome screen (in case it's visible)
+    if (welcomeScreen) {
+        welcomeScreen.style.display = 'none';
+    }
+
     mobilePauseButton.textContent = 'Pause';
     hideOverlays();
 }

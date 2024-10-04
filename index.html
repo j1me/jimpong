@@ -6,10 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Link to external CSS file -->
     <link rel="stylesheet" href="styles.css">
+    <!-- Importing the 'Press Start 2P' font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Game Title -->
     <h1>JimPong</h1>
+
+    <!-- Welcome Screen (Visible on Mobile Devices) -->
+    <div id="welcomeScreen">
+        <h2>Welcome to <span class="gameTitle">JimPong</span></h2>
+        <p>Control both paddles by moving them up and down.</p>
+        <button id="playButton">Play</button>
+    </div>
 
     <!-- Main Game Area -->
     <div id="gameArea">
@@ -48,11 +58,11 @@
                 <p><em>Start the game by pressing any control key or the Start button below.</em></p>
             </div>
 
-            <!-- Game Canvas -->
+            <!-- Game Container -->
             <div id="gameContainer">
                 <canvas id="gameCanvas" width="800" height="600"></canvas>
 
-                <!-- Start/Restart Button (Moved into game container) -->
+                <!-- Start/Restart Button (Desktop) -->
                 <button id="startButton">Start Game</button>
 
                 <!-- Toggle Orientation Button -->
