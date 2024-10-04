@@ -16,7 +16,7 @@
 
     <!-- Welcome Screen (Visible on Mobile Devices) -->
     <div id="welcomeScreen">
-        <h2>Welcome to <span class="gameTitle">JimPong</span></h2>
+        <h2>Welcome to<span class="gameTitle"> JimPong</span></h2>
         <p>Control both paddles by moving them up and down.</p>
         <button id="playButton">Play</button>
     </div>
@@ -65,9 +65,6 @@
                 <!-- Start/Restart Button (Desktop) -->
                 <button id="startButton">Start Game</button>
 
-                <!-- Toggle Orientation Button -->
-                <button id="toggleOrientationButton">Fit Height</button>
-
                 <!-- Congratulatory Message Overlay -->
                 <div id="congratsOverlay" class="overlay">
                     <h2>Congratulations! You've completed the round!</h2>
@@ -85,8 +82,22 @@
                     <h2>Game Paused</h2>
                 </div>
 
-                <!-- Mobile Pause/Restart Button -->
+                <!-- Mobile Pause/Resume Button -->
                 <button id="mobilePauseButton">Pause</button>
+            </div>
+
+            <!-- Paddle Controls (Buttons) -->
+            <div id="paddleControls">
+                <!-- Left Paddle Controls -->
+                <div class="paddleControl leftPaddleControl">
+                    <button id="leftPaddleUp">▲</button>
+                    <button id="leftPaddleDown">▼</button>
+                </div>
+                <!-- Right Paddle Controls -->
+                <div class="paddleControl rightPaddleControl">
+                    <button id="rightPaddleUp">▲</button>
+                    <button id="rightPaddleDown">▼</button>
+                </div>
             </div>
         </div>
     </div>

@@ -102,6 +102,27 @@ h1 {
     flex-shrink: 0;
 }
 
+#controlsContainer h2 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #e94560;
+}
+
+#controlsContainer p,
+#controlsContainer ul {
+    margin-bottom: 10px;
+}
+
+#controlsContainer ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#controlsContainer li::before {
+    content: '• ';
+    color: #e94560;
+}
+
 /* Main Container: Game and Controls */
 #mainContainer {
     display: flex;
@@ -157,7 +178,7 @@ canvas {
     background-color: #ff6b6b;
 }
 
-/* Pause/Restart Button for Mobile */
+/* Pause/Resume Button for Mobile */
 #mobilePauseButton {
     display: none; /* Hidden by default, shown on mobile */
     position: absolute;
@@ -177,27 +198,6 @@ canvas {
 }
 
 #mobilePauseButton:hover {
-    background-color: #ff6b6b;
-}
-
-/* Toggle Orientation Button */
-#toggleOrientationButton {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-family: 'Press Start 2P', cursive;
-    font-size: 14px;
-    padding: 8px 16px;
-    background-color: #e94560;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    z-index: 10;
-}
-
-#toggleOrientationButton:hover {
     background-color: #ff6b6b;
 }
 
@@ -263,7 +263,7 @@ canvas {
 
 /* Welcome Screen Styling */
 #welcomeScreen {
-    display: none; /* Hidden by default, will be shown only on mobile */
+    display: none; /* Hidden by default */
     text-align: center;
     padding: 20px;
     flex-direction: column;
@@ -272,15 +272,24 @@ canvas {
     height: 100vh; /* Full viewport height */
 }
 
-/* Ensure JimPong in the welcome screen has the same styling as the main header */
-#welcomeScreen .gameTitle {
-    font-size: 48px; /* Match the h1 font size */
-    text-shadow: 2px 2px #0f3460; /* Match the glow effect shadow */
-    animation: glow 2s ease-in-out infinite alternate; /* Apply the glow animation */
-    color: #fff; /* Set text color to white, same as h1 */
+#welcomeScreen h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
-/* Update Play button in the welcome screen to match the other buttons */
+#welcomeScreen .gameTitle {
+    font-size: 48px; /* Same as h1 */
+    text-shadow: 2px 2px #0f3460;
+    animation: glow 2s ease-in-out infinite alternate;
+    color: #fff;
+    margin-left: 10px; /* Add spacing */
+}
+
+#welcomeScreen p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
 #welcomeScreen button {
     font-family: 'Press Start 2P', cursive;
     font-size: 14px;
@@ -293,33 +302,79 @@ canvas {
     transition: background-color 0.3s ease;
 }
 
-/* Add hover effect for the Play button */
 #welcomeScreen button:hover {
     background-color: #ff6b6b;
 }
 
+/* Paddle Controls Styling */
+#paddleControls {
+    display: none; /* Hidden by default */
+    width: 100%;
+    max-width: 800px;
+    margin-top: 10px;
+    box-sizing: border-box;
+}
 
-/* Mobile Specific Styles */
+.paddleControl {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px;
+}
+
+.paddleControl button {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 24px;
+    padding: 10px;
+    margin: 5px 0;
+    width: 60px;
+    height: 60px;
+    background-color: #e94560;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.paddleControl button:hover {
+    background-color: #ff6b6b;
+}
+
+/* Default Visibility Settings */
+
+/* Hide welcome screen by default */
+#welcomeScreen {
+    display: none;
+}
+
+/* Show game area and title by default */
+#gameArea,
+h1 {
+    display: flex;
+}
+
+/* Mobile Devices: Show welcome screen and hide game area initially */
 @media (max-width: 768px) {
     /* Show welcome screen on mobile */
     #welcomeScreen {
         display: flex;
     }
 
-    /* Hide main game area and title initially on mobile */
+    /* Hide game area and title initially on mobile */
     #gameArea,
     h1 {
+        display: none;
+    }
+
+    /* Hide controls instructions */
+    #controlsContainer {
         display: none;
     }
 
     /* Adjust h1 font size */
     h1 {
         font-size: 32px;
-    }
-
-    /* Hide controls instructions */
-    #controlsContainer {
-        display: none;
     }
 
     /* Adjust scoreboard font sizes */
@@ -331,38 +386,58 @@ canvas {
         font-size: 10px;
     }
 
-    /* Hide mobile pause button in portrait mode */
-    #mobilePauseButton {
-        display: none;
-    }
-}
-
-/* Mobile Landscape Mode Styles */
-@media (max-width: 768px) and (orientation: landscape) {
-    /* Show main game area and title in landscape mode */
-    #gameArea,
-    h1 {
-        display: flex;
-    }
-
-    /* Hide welcome screen in landscape mode */
-    #welcomeScreen {
-        display: none;
-    }
-
     /* Show mobile pause button */
     #mobilePauseButton {
         display: block;
     }
 
-    /* Adjust canvas and container sizes */
-    #gameContainer {
-        max-width: 100%;
-        flex: 1;
+    /* Show paddle controls */
+    #paddleControls {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
     }
 
-    canvas {
-        width: 100%;
-        height: auto;
+    /* Portrait Mode */
+    @media (orientation: portrait) {
+        #paddleControls {
+            flex-direction: row;
+        }
     }
+
+    /* Landscape Mode */
+    @media (orientation: landscape) {
+        #mainContainer {
+            flex-direction: row;
+            align-items: center;
+        }
+
+        #paddleControls {
+            flex-direction: column;
+            position: relative;
+            height: 100%;
+        }
+
+        .leftPaddleControl {
+            order: -1; /* Place left controls before game container */
+        }
+
+        /* Adjust game container size */
+        #gameContainer {
+            flex: 1;
+        }
+    }
+}
+
+/* When the game has started, show the game area on mobile */
+body.game-started #gameArea,
+body.game-started h1 {
+    display: flex;
+}
+
+/* Hide welcome screen when game has started */
+body.game-started #welcomeScreen {
+    display: none;
 }
