@@ -370,8 +370,10 @@ function restartGame() {
     leftPaddle.speed = 400;
     rightPaddle.speed = 400;
     gameOver = false; // Reset game over state
+    gameStarted = false; // Reset game started state
     updateScoreboard();
     startButton.textContent = 'Start Game';
+    startButton.style.display = 'block'; // Make the start button visible again
     mobilePauseButton.textContent = 'Pause';
     hideOverlays();
 }
@@ -419,6 +421,7 @@ function showGameOver() {
     ball.dy = 0;
     gameOverOverlay.style.display = 'flex';
     gameOverOverlay.querySelector('button').focus(); // Automatically focus the button
+    startButton.style.display = 'block'; // Make sure the start button is visible
 }
 
 // Function to Show General Message Overlay (e.g., Winning the Game)
