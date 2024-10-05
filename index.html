@@ -16,7 +16,7 @@
 
     <!-- Welcome Screen (Visible on Mobile Devices) -->
     <div id="welcomeScreen">
-        <h2>Welcome to<span class="gameTitle"> JimPong</span></h2>
+        <h2>Welcome to <span class="gameTitle">JimPong</span></h2>
         <p>Control both paddles by moving them up and down.</p>
         <button id="playButton">Play</button>
     </div>
@@ -78,27 +78,29 @@
                 </div>
 
                 <!-- Pause Overlay -->
-                <div id="pauseOverlay">
+                <div id="pauseOverlay" class="overlay">
                     <h2>Game Paused</h2>
+                    <button onclick="togglePause()">Resume</button>
                 </div>
 
-                <!-- Mobile Pause/Resume Button -->
+                <!-- Mobile Pause/Restart Button -->
                 <button id="mobilePauseButton">Pause</button>
             </div>
+        </div>
+    </div>
 
-            <!-- Paddle Controls (Buttons) -->
-            <div id="paddleControls">
-                <!-- Left Paddle Controls -->
-                <div class="paddleControl leftPaddleControl">
-                    <button id="leftPaddleUp">▲</button>
-                    <button id="leftPaddleDown">▼</button>
-                </div>
-                <!-- Right Paddle Controls -->
-                <div class="paddleControl rightPaddleControl">
-                    <button id="rightPaddleUp">▲</button>
-                    <button id="rightPaddleDown">▼</button>
-                </div>
-            </div>
+    <!-- Paddle Controls (Mobile Only) -->
+    <div id="paddleControls">
+        <!-- Left Paddle Controls -->
+        <div class="paddleControl leftPaddleControl">
+            <button id="leftPaddleUp">▲</button>
+            <button id="leftPaddleDown">▼</button>
+        </div>
+
+        <!-- Right Paddle Controls -->
+        <div class="paddleControl rightPaddleControl">
+            <button id="rightPaddleUp">▲</button>
+            <button id="rightPaddleDown">▼</button>
         </div>
     </div>
 
