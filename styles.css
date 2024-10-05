@@ -161,10 +161,6 @@ canvas {
 /* Pause/Restart Button for Mobile */
 #mobilePauseButton {
     display: none; /* Hidden by default, shown on mobile */
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
     font-family: 'Press Start 2P', cursive;
     font-size: 14px;
     padding: 8px 16px;
@@ -174,7 +170,7 @@ canvas {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    z-index: 10;
+    margin-top: 10px; /* Add space above the button */
 }
 
 #mobilePauseButton:hover {
@@ -317,12 +313,12 @@ canvas {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        height: auto;
         width: 100%;
+        padding-bottom: 20px;
     }
 
     #mainContainer {
-        justify-content: center;
         width: 100%;
     }
 
@@ -341,6 +337,7 @@ canvas {
     /* Show mobile pause button */
     #mobilePauseButton {
         display: block;
+        margin-top: 10px;
     }
 }
 
@@ -363,6 +360,7 @@ canvas {
         align-items: center;
         justify-content: center;
         height: 100vh;
+        padding: 10px;
     }
 
     #scoreboard {
@@ -374,20 +372,14 @@ canvas {
     }
 
     #mainContainer {
-        flex: 0 1 auto;
+        flex: 1;
         height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 
     #gameContainer {
         height: 100%;
         width: auto;
-        max-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        max-height: calc(100vh - 60px); /* Adjust to leave space for the button */
     }
 
     /* Ensure the canvas maintains its aspect ratio */
@@ -397,10 +389,13 @@ canvas {
         height: auto;
     }
 
-    /* Adjust mobile pause button position */
+    /* Position the mobile pause button below the game container */
     #mobilePauseButton {
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
+        margin-top: 0;
+        margin-left: 10px;
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+        height: calc(100vh - 80px);
+        padding: 10px 5px;
     }
 }
