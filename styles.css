@@ -47,7 +47,7 @@ h1 {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 800px;
+    max-width: 1200px;
     padding: 0;
     box-sizing: border-box;
     position: relative;
@@ -102,27 +102,6 @@ h1 {
     flex-shrink: 0;
 }
 
-#controlsContainer h2 {
-    margin-top: 0;
-    font-size: 18px;
-    color: #e94560;
-}
-
-#controlsContainer p,
-#controlsContainer ul {
-    margin-bottom: 10px;
-}
-
-#controlsContainer ul {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-#controlsContainer li::before {
-    content: '• ';
-    color: #e94560;
-}
-
 /* Main Container: Game and Controls */
 #mainContainer {
     display: flex;
@@ -139,11 +118,11 @@ h1 {
     align-items: center;
     justify-content: center;
     position: relative;
-    flex: 1 1 600px;
-    margin: 0;
+    flex: 1 1 auto;
+    margin: 0 auto;
     width: 100%;
     max-width: 800px;
-    height: auto; /* Add this line */
+    height: 100%;
 }
 
 /* Canvas Styling */
@@ -155,7 +134,6 @@ canvas {
     width: 100%;
     height: auto;
     touch-action: none; /* Prevent default touch behaviors */
-    display: block; /* Add this line */
 }
 
 /* Start/Restart Button Styling */
@@ -180,10 +158,10 @@ canvas {
     background-color: #ff6b6b;
 }
 
-/* Pause/Resume Button for Mobile */
+/* Pause/Restart Button for Mobile */
 #mobilePauseButton {
     display: none; /* Hidden by default, shown on mobile */
-    position: fixed; /* Changed to fixed to keep it at the bottom */
+    position: absolute;
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
@@ -265,34 +243,24 @@ canvas {
 
 /* Welcome Screen Styling */
 #welcomeScreen {
-    display: none; /* Hidden by default */
+    display: none; /* Hidden by default, will be shown only on mobile */
     text-align: center;
     padding: 20px;
-    display: flex; /* Flex container */
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh; /* Full viewport height */
+    height: 100vh; /* Full viewport height */
 }
 
-#welcomeScreen h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
+/* Ensure JimPong in the welcome screen has the same styling as the main header */
 #welcomeScreen .gameTitle {
-    font-size: 48px; /* Same as h1 */
-    text-shadow: 2px 2px #0f3460;
-    animation: glow 2s ease-in-out infinite alternate;
-    color: #fff;
-    margin-left: 10px; /* Add spacing */
+    font-size: 48px; /* Match the h1 font size */
+    text-shadow: 2px 2px #0f3460; /* Match the glow effect shadow */
+    animation: glow 2s ease-in-out infinite alternate; /* Apply the glow animation */
+    color: #fff; /* Set text color to white, same as h1 */
 }
 
-#welcomeScreen p {
-    font-size: 16px;
-    margin-bottom: 20px;
-}
-
+/* Update Play button in the welcome screen to match the other buttons */
 #welcomeScreen button {
     font-family: 'Press Start 2P', cursive;
     font-size: 14px;
@@ -305,88 +273,36 @@ canvas {
     transition: background-color 0.3s ease;
 }
 
+/* Add hover effect for the Play button */
 #welcomeScreen button:hover {
     background-color: #ff6b6b;
 }
 
-/* Paddle Controls Styling */
-#paddleControls {
-    display: none; /* Hidden by default */
-    width: 100%;
-    max-width: 800px;
-    margin-top: 10px;
-    box-sizing: border-box;
-    justify-content: space-between;
-    position: fixed;
-    bottom: 60px; /* Adjust this value to position above the mobile pause button */
-    left: 0;
-    right: 0;
-    padding: 0 20px;
-    z-index: 10;
-}
 
-.paddleControl {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.paddleControl button {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 24px;
-    padding: 10px;
-    margin: 5px 0;
-    width: 60px;
-    height: 60px;
-    background-color: #e94560;
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.paddleControl button:hover {
-    background-color: #ff6b6b;
-}
-
-/* Default Visibility Settings */
-
-/* Hide welcome screen by default */
-#welcomeScreen {
-    display: none;
-}
-
-/* Show game area and title by default */
-#gameArea,
-h1 {
-    display: flex;
-}
-
-/* Mobile Devices: Adjustments */
+/* Mobile Specific Styles */
 @media (max-width: 768px) {
     /* Show welcome screen on mobile */
     #welcomeScreen {
         display: flex;
-        min-height: 100vh;
     }
 
-    /* Hide game area and title initially on mobile */
+    /* Hide main game area and title initially on mobile */
     #gameArea,
     h1 {
         display: none;
     }
 
-    /* Hide controls instructions on mobile */
-    #controlsContainer {
-        display: none;
-    }
-
-    /* Adjust font sizes on mobile */
+    /* Adjust h1 font size */
     h1 {
         font-size: 32px;
     }
 
+    /* Hide controls instructions on all mobile devices */
+    #controlsContainer {
+        display: none !important; /* Use !important to ensure it's hidden on all mobile views */
+    }
+
+    /* Adjust scoreboard font sizes */
     .score-item h3 {
         font-size: 12px;
     }
@@ -395,76 +311,96 @@ h1 {
         font-size: 10px;
     }
 
-    /* Show mobile pause button */
-    #mobilePauseButton {
-        display: block;
-    }
-
-    /* Show paddle controls */
-    #paddleControls {
-        display: flex;
-    }
-
-    .paddleControl {
-        flex-direction: column;
-        margin: 0 20px;
-    }
-
-    /* Adjust the main container to center content */
-    #mainContainer {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
     /* Center the game area */
     #gameArea {
-        flex: none;
-        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100%;
     }
 
-    /* Ensure canvas is visible and responsive */
-    #gameCanvas {
+    #mainContainer {
+        justify-content: center;
+        width: 100%;
+    }
+
+    #gameContainer {
         max-width: 100%;
         height: auto;
-        display: block;
+        aspect-ratio: 4 / 3; /* Maintain the aspect ratio of the game */
     }
 
-    /* Adjust canvas size for mobile */
-    #gameCanvas {
-        width: 100%;
-        height: auto;
-    }
-
-    /* Ensure game area is visible when game has started */
-    body.game-started #gameArea {
-        display: flex !important;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    /* Ensure canvas container is visible and sized properly */
-    #gameContainer {
-        width: 100%;
-        height: auto;
-        aspect-ratio: 4 / 3; /* Maintain aspect ratio */
-    }
-
-    /* Adjust canvas size for mobile */
     canvas {
         width: 100%;
         height: 100%;
         object-fit: contain;
     }
+
+    /* Show mobile pause button */
+    #mobilePauseButton {
+        display: block;
+    }
 }
 
-/* When the game has started, show the game area on mobile */
-body.game-started #gameArea,
-body.game-started h1 {
-    display: flex !important;
-}
+/* Mobile Landscape Mode Styles */
+@media (max-width: 768px) and (orientation: landscape) {
+    /* Show main game area and title in landscape mode */
+    #gameArea,
+    h1 {
+        display: flex;
+    }
 
-/* Hide welcome screen when game has started */
-body.game-started #welcomeScreen {
-    display: none !important;
+    /* Hide welcome screen in landscape mode */
+    #welcomeScreen {
+        display: none;
+    }
+
+    /* Adjust layout for landscape */
+    #gameArea {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    #scoreboard {
+        flex-direction: column;
+        width: auto;
+        height: 100%;
+        justify-content: center;
+        margin-right: 10px;
+    }
+
+    #mainContainer {
+        flex: 0 1 auto;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #gameContainer {
+        height: 100%;
+        width: auto;
+        max-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Ensure the canvas maintains its aspect ratio */
+    canvas {
+        max-height: 100%;
+        width: auto;
+        height: auto;
+    }
+
+    /* Adjust mobile pause button position */
+    #mobilePauseButton {
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 }
