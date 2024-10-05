@@ -2,25 +2,9 @@
 
 /* JavaScript for Game Functionality */
 
-// Get references to elements
+// Get canvas and context
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-
-const startButton = document.getElementById('startButton');
-const mobilePauseButton = document.getElementById('mobilePauseButton');
-const congratsOverlay = document.getElementById('congratsOverlay');
-const gameOverOverlay = document.getElementById('gameOverOverlay');
-const pauseOverlay = document.getElementById('pauseOverlay');
-const playButton = document.getElementById('playButton');
-const welcomeScreen = document.getElementById('welcomeScreen');
-const gameArea = document.getElementById('gameArea');
-const gameTitle = document.querySelector('h1');
-
-// Paddle Control Buttons
-const leftPaddleUpButton = document.getElementById('leftPaddleUp');
-const leftPaddleDownButton = document.getElementById('leftPaddleDown');
-const rightPaddleUpButton = document.getElementById('rightPaddleUp');
-const rightPaddleDownButton = document.getElementById('rightPaddleDown');
 
 // Paddle and Ball Dimensions
 const paddleWidth = 10;
@@ -66,10 +50,19 @@ const pointsPerLevel = 10;
 let keys = {}; // Object to track pressed keys
 let gameStarted = false;
 let isPaused = false;
-let gameOver = false; // Variable to track game over state
+let gameOver = false; // New variable to track game over state
 
 // Game Loop Variables
 let lastTime = 0; // To keep track of the last timestamp
+
+// DOM Elements
+const startButton = document.getElementById('startButton');
+const mobilePauseButton = document.getElementById('mobilePauseButton');
+const congratsOverlay = document.getElementById('congratsOverlay');
+const gameOverOverlay = document.getElementById('gameOverOverlay');
+const pauseOverlay = document.getElementById('pauseOverlay');
+const playButton = document.getElementById('playButton');
+const welcomeScreen = document.getElementById('welcomeScreen');
 
 // Responsive canvas sizing
 function resizeCanvas() {
@@ -80,12 +73,12 @@ function resizeCanvas() {
     const aspect = canvas.width / canvas.height;
     let newWidth, newHeight;
 
-    // Always fit to width
-    newWidth = containerWidth;
-    newHeight = newWidth / aspect;
-    if (newHeight > containerHeight) {
+    if (containerWidth / containerHeight > aspect) {
         newHeight = containerHeight;
         newWidth = newHeight * aspect;
+    } else {
+        newWidth = containerWidth;
+        newHeight = newWidth / aspect;
     }
 
     // Set canvas display size
@@ -107,7 +100,6 @@ function initGame() {
 
     resetPaddles(); // Reset paddles to initial positions
     resetBall(); // Reset ball position and state
-    updateScoreboard();
 }
 
 // Event Listeners for Keyboard Controls
@@ -145,7 +137,7 @@ startButton.addEventListener('click', () => {
     }
 });
 
-// Event Listener for Mobile Pause/Resume Button
+// Event Listener for Mobile Pause/Restart Button
 mobilePauseButton.addEventListener('click', () => {
     if (!gameStarted) {
         startGame();
@@ -157,12 +149,22 @@ mobilePauseButton.addEventListener('click', () => {
 // Event Listener for Play Button on Mobile
 if (playButton) {
     playButton.addEventListener('click', () => {
-        // Add 'game-started' class to the body
-        document.body.classList.add('game-started');
-
+        // Hide the welcome screen
+        welcomeScreen.style.display = 'none';
+        // Show the game area
+        document.getElementById('gameArea').style.display = 'flex';
+        // Lock the orientation to landscape if possible
+        lockOrientation();
         // Start the game
         startGame();
     });
+}
+
+// Function to Lock Orientation to Landscape (for supported browsers)
+function lockOrientation() {
+    if (screen.orientation && screen.orientation.unlock) {
+        screen.orientation.unlock();
+    }
 }
 
 // Function to Start the Game
@@ -181,9 +183,12 @@ function startGame() {
     // Hide the Start button (desktop)
     startButton.style.display = 'none';
 
-    // Update mobile pause button text
-    mobilePauseButton.textContent = 'Pause';
+    // Hide the welcome screen (in case it's visible)
+    if (welcomeScreen) {
+        welcomeScreen.style.display = 'none';
+    }
 
+    mobilePauseButton.textContent = 'Pause';
     hideOverlays();
 }
 
@@ -273,11 +278,9 @@ function updateBall(deltaTime) {
         }
 
         // Left Paddle Collision
-        if (
-            ball.x - ball.radius < leftPaddle.x + leftPaddle.width &&
+        if (ball.x - ball.radius < leftPaddle.x + leftPaddle.width &&
             ball.y > leftPaddle.y &&
-            ball.y < leftPaddle.y + leftPaddle.height
-        ) {
+            ball.y < leftPaddle.y + leftPaddle.height) {
             ball.x = leftPaddle.x + leftPaddle.width + ball.radius; // Prevent sticking
             ball.dx *= -1;
             score++;
@@ -286,11 +289,9 @@ function updateBall(deltaTime) {
         }
 
         // Right Paddle Collision
-        if (
-            ball.x + ball.radius > rightPaddle.x &&
+        if (ball.x + ball.radius > rightPaddle.x &&
             ball.y > rightPaddle.y &&
-            ball.y < rightPaddle.y + rightPaddle.height
-        ) {
+            ball.y < rightPaddle.y + rightPaddle.height) {
             ball.x = rightPaddle.x - ball.radius; // Prevent sticking
             ball.dx *= -1;
             score++;
@@ -457,85 +458,13 @@ function togglePause() {
 }
 
 /*
-   Paddle Control Buttons Event Listeners
-*/
-
-// Left Paddle Up Button
-if (leftPaddleUpButton) {
-    leftPaddleUpButton.addEventListener('mousedown', () => {
-        keys['q'] = true;
-    });
-    leftPaddleUpButton.addEventListener('mouseup', () => {
-        keys['q'] = false;
-    });
-    leftPaddleUpButton.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        keys['q'] = true;
-    });
-    leftPaddleUpButton.addEventListener('touchend', () => {
-        keys['q'] = false;
-    });
-}
-
-// Left Paddle Down Button
-if (leftPaddleDownButton) {
-    leftPaddleDownButton.addEventListener('mousedown', () => {
-        keys['w'] = true;
-    });
-    leftPaddleDownButton.addEventListener('mouseup', () => {
-        keys['w'] = false;
-    });
-    leftPaddleDownButton.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        keys['w'] = true;
-    });
-    leftPaddleDownButton.addEventListener('touchend', () => {
-        keys['w'] = false;
-    });
-}
-
-// Right Paddle Up Button
-if (rightPaddleUpButton) {
-    rightPaddleUpButton.addEventListener('mousedown', () => {
-        keys['o'] = true;
-    });
-    rightPaddleUpButton.addEventListener('mouseup', () => {
-        keys['o'] = false;
-    });
-    rightPaddleUpButton.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        keys['o'] = true;
-    });
-    rightPaddleUpButton.addEventListener('touchend', () => {
-        keys['o'] = false;
-    });
-}
-
-// Right Paddle Down Button
-if (rightPaddleDownButton) {
-    rightPaddleDownButton.addEventListener('mousedown', () => {
-        keys['p'] = true;
-    });
-    rightPaddleDownButton.addEventListener('mouseup', () => {
-        keys['p'] = false;
-    });
-    rightPaddleDownButton.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        keys['p'] = true;
-    });
-    rightPaddleDownButton.addEventListener('touchend', () => {
-        keys['p'] = false;
-    });
-}
-
-/*
-   Touch Controls for Canvas (Optional)
+   Touch Controls for Mobile
 */
 
 // Variables to track touch positions
 let touchPositions = {};
 
-// Function to handle touch start on canvas
+// Function to handle touch start
 function handleTouchStart(e) {
     if (gameOver) return; // Disable touch controls when game is over
 
@@ -548,7 +477,7 @@ function handleTouchStart(e) {
     }
 }
 
-// Function to handle touch move on canvas
+// Function to handle touch move
 function handleTouchMove(e) {
     if (gameOver) return; // Disable touch controls when game is over
 
@@ -585,7 +514,7 @@ function handleTouchMove(e) {
     }
 }
 
-// Function to handle touch end on canvas
+// Function to handle touch end
 function handleTouchEnd(e) {
     for (let i = 0; i < e.changedTouches.length; i++) {
         const touch = e.changedTouches[i];
