@@ -387,8 +387,7 @@ function winGame() {
 // Function to Update the Scoreboard
 function updateScoreboard() {
     document.getElementById('score').textContent = score;
-    document.getElementById('level').textContent = level;
-    document.getElementById('round').textContent = `${round}/${maxRounds}`;
+    document.getElementById('level').textContent = `${level} / 10`;
 }
 
 // Start the Game Loop

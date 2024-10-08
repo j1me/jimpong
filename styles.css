@@ -71,7 +71,7 @@ h1 {
 
 .score-item {
     flex: 1;
-    min-width: 80px;
+    min-width: 150px; /* Increased to accommodate longer text */
     margin: 5px 0;
 }
 
@@ -81,9 +81,9 @@ h1 {
     font-size: 16px;
 }
 
-.score-item p {
-    margin: 5px 0 0 0;
-    font-size: 14px;
+.score-item h3 span {
+    color: #fff; /* Change the color of the value to white */
+    margin-left: 5px; /* Add a small space between the label and the value */
 }
 
 /* Controls Instructions Styling */
