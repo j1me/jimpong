@@ -71,7 +71,7 @@ h1 {
 
 .score-item {
     flex: 1;
-    min-width: 150px; /* Increased to accommodate longer text */
+    min-width: 80px;
     margin: 5px 0;
 }
 
@@ -81,9 +81,9 @@ h1 {
     font-size: 16px;
 }
 
-.score-item h3 span {
-    color: #fff; /* Change the color of the value to white */
-    margin-left: 5px; /* Add a small space between the label and the value */
+.score-item p {
+    margin: 5px 0 0 0;
+    font-size: 14px;
 }
 
 /* Controls Instructions Styling */
@@ -161,6 +161,10 @@ canvas {
 /* Pause/Restart Button for Mobile */
 #mobilePauseButton {
     display: none; /* Hidden by default, shown on mobile */
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
     font-family: 'Press Start 2P', cursive;
     font-size: 14px;
     padding: 8px 16px;
@@ -170,7 +174,7 @@ canvas {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 10px; /* Add space above the button */
+    z-index: 10;
 }
 
 #mobilePauseButton:hover {
@@ -313,12 +317,12 @@ canvas {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: auto;
+        height: 100vh;
         width: 100%;
-        padding-bottom: 20px;
     }
 
     #mainContainer {
+        justify-content: center;
         width: 100%;
     }
 
@@ -337,7 +341,6 @@ canvas {
     /* Show mobile pause button */
     #mobilePauseButton {
         display: block;
-        margin-top: 10px;
     }
 }
 
@@ -360,7 +363,6 @@ canvas {
         align-items: center;
         justify-content: center;
         height: 100vh;
-        padding: 10px;
     }
 
     #scoreboard {
@@ -372,14 +374,20 @@ canvas {
     }
 
     #mainContainer {
-        flex: 1;
+        flex: 0 1 auto;
         height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     #gameContainer {
         height: 100%;
         width: auto;
-        max-height: calc(100vh - 60px); /* Adjust to leave space for the button */
+        max-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     /* Ensure the canvas maintains its aspect ratio */
@@ -389,13 +397,10 @@ canvas {
         height: auto;
     }
 
-    /* Position the mobile pause button below the game container */
+    /* Adjust mobile pause button position */
     #mobilePauseButton {
-        margin-top: 0;
-        margin-left: 10px;
-        writing-mode: vertical-rl;
-        text-orientation: upright;
-        height: calc(100vh - 80px);
-        padding: 10px 5px;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }

@@ -340,13 +340,12 @@ function draw() {
 
 // Function to Check for Level Up
 function checkLevelUp() {
-    if (score >= pointsPerLevel) {
+    if (score >= pointsPerLevel * level) {
         level++;
         round++;
         if (round > maxRounds) {
             winGame();
         } else {
-            score = 0;
             ball.speed *= 1.1; // Increase speed by 10%
             // Update ball direction with increased speed
             let angle = Math.atan2(ball.dy, ball.dx);
@@ -370,10 +369,8 @@ function restartGame() {
     leftPaddle.speed = 400;
     rightPaddle.speed = 400;
     gameOver = false; // Reset game over state
-    gameStarted = false; // Reset game started state
     updateScoreboard();
     startButton.textContent = 'Start Game';
-    startButton.style.display = 'block'; // Make the start button visible again
     mobilePauseButton.textContent = 'Pause';
     hideOverlays();
 }
@@ -387,7 +384,8 @@ function winGame() {
 // Function to Update the Scoreboard
 function updateScoreboard() {
     document.getElementById('score').textContent = score;
-    document.getElementById('level').textContent = `${level} / 10`;
+    document.getElementById('level').textContent = level;
+    document.getElementById('round').textContent = `${round}/${maxRounds}`;
 }
 
 // Start the Game Loop
@@ -420,7 +418,6 @@ function showGameOver() {
     ball.dy = 0;
     gameOverOverlay.style.display = 'flex';
     gameOverOverlay.querySelector('button').focus(); // Automatically focus the button
-    startButton.style.display = 'block'; // Make sure the start button is visible
 }
 
 // Function to Show General Message Overlay (e.g., Winning the Game)
